@@ -1,0 +1,8 @@
+backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: microservizio
+spec:
+  type: service
+  owner: user:guest
+  lifecycle: experimental

@@ -1,0 +1,12 @@
+package it.backstage.vo;
+
+
+
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class testVO {
+
+}

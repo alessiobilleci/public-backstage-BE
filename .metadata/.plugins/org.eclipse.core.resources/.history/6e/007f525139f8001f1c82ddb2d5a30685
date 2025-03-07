@@ -1,0 +1,10 @@
+package it.backstage.controller;
+
+import org.springframework.validation.annotation.Validated;
+
+@Validated
+@RestController
+@RequestMapping("/backstage/v1/test")
+public class TestController {
+
+}

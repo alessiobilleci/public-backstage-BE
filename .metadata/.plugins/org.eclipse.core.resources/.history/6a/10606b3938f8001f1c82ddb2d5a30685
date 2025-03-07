@@ -1,0 +1,5 @@
+package it.backstage.response;
+
+public class ResponseTest {
+
+}

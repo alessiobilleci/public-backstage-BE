@@ -1,0 +1,16 @@
+package it.backstage.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+
+/**
+ * The Class AnagraficaController.
+ */
+@Slf4j
+@Validated
+@RestController
+@RequestMapping("/mit/v1/anagrafica")
+public class TestController {
+
+}

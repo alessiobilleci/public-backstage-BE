@@ -1,0 +1,82 @@
+package com.acn.agid.ms.mit.gest.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.acn.agid.ms.mit.gest.response.GetAllAnagListResponse;
+import com.acn.agid.ms.mit.gest.service.AnagraficaService;
+import com.acn.agid.ms.mit.gest.util.ResponseConst;
+
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.Tracer;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * The Class AnagraficaController.
+ */
+@Slf4j
+@Validated
+@RestController
+@RequestMapping("/mit/v1/anagrafica")
+public class AnagraficaController {
+
+	/** The Constant ENVIRONMENTNAME. */
+	private static final String ENVIRONMENTNAME = "environment.name";
+
+	/** The Constant EVENTCATEGORY. */
+	private static final String EVENTCATEGORY = "event.category";
+
+	/** The Constant FLOWNAME. */
+	private static final String FLOWNAME = "flow.name";
+
+	/** The Constant SERVICEVERSION. */
+	private static final String SERVICEVERSION = "service.version";
+
+	/** The Constant SESSION. */
+	private static final String SESSION = "session";
+
+	/** The anag service. */
+	@Autowired
+	AnagraficaService anagService;
+
+	/** The anagrafica controller tracer. */
+	@Autowired
+	Tracer anagraficaControllerTracer;
+
+	/** The application version. */
+	@Value("${application.version}")
+	private String applicationVersion;
+
+	/** The active profile. */
+	@Value("${spring.profiles.active:not available}")
+	private String activeProfile;
+
+	/**
+	 * Gets the all anag list.
+	 *
+	 * @return the all anag list
+	 */
+	@GetMapping(name = "Retrieve All Anag List", value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> getAllAnagList() {
+
+		Span span = anagraficaControllerTracer.spanBuilder("AnagraficaController.getAllAnagList")
+				.setSpanKind(SpanKind.SERVER).setAttribute(ENVIRONMENTNAME, activeProfile)
+				.setAttribute(FLOWNAME, "getAllAnagList").setAttribute(EVENTCATEGORY, SESSION)
+				.setAttribute(SERVICEVERSION, applicationVersion).startSpan();
+
+		log.debug("START - GET - /mit/v1/anagrafica/list");
+		GetAllAnagListResponse response = anagService.getAllAnagrafiche();
+		log.debug("END - GET - /mit/v1/anagrafica/list");
+		span.end();
+		return GetAllAnagListResponse.getSuccessfulRequestResponse(response, ResponseConst.MESSAGE_OK_FINDED,
+				ResponseConst.MESSAGE_OK_FINDED);
+	}
+
+}
